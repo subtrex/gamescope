@@ -9,7 +9,6 @@ matplotlib
 numpy
 geopy
 pydeck
-Pillow  # For PIL, the package name is Pillow
 graphviz
 altair
 streamlit_agraph
