@@ -13,4 +13,3 @@ graphviz
 altair
 streamlit_agraph
 matplotlib_venn
-json
