@@ -1,0 +1,17 @@
+requests
+streamlit
+streamlit_folium
+folium
+pandas
+geopandas
+seaborn
+matplotlib
+numpy
+geopy
+pydeck
+Pillow  # For PIL, the package name is Pillow
+graphviz
+altair
+streamlit_agraph
+matplotlib_venn
+json
