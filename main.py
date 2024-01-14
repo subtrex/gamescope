@@ -9,6 +9,11 @@ import matplotlib.pyplot as plt
 from folium import Choropleth, GeoJson
 import json
 import numpy as np
+from io import BytesIO
+import base64
+from folium import IFrame, plugins
+import plotly.express as px
+import plotly.io as pio
 
 st.set_page_config(page_title="GameScope", page_icon=":trident:", layout="wide")
 
@@ -286,6 +291,74 @@ for i in range(0,len(marker_data)):
                 </svg>
             </div>""")
     ).add_to(m)
+
+# Pie chart
+region_labels = ['NA Sales', 'EU Sales', 'JP Sales', 'Other Sales']
+region_sizes = [cumulative_sales[0], cumulative_sales[1], cumulative_sales[2], cumulative_sales[3]]
+colors = ['#ffbfba', '#dbacfc', '#fdffba', '#fcb8e9']
+
+fig, ax = plt.subplots(figsize=(10, 10))
+plt.title('Sales Volume %', fontsize=30)
+ax.pie(region_sizes, colors=colors, autopct='%1.1f%%', startangle=90, wedgeprops=dict(width=0.7, edgecolor='w', linewidth=2), textprops={'fontsize': 20})
+fig.patch.set_alpha(0.0)
+ax.patch.set_alpha(0.0)
+ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+
+# Convert the Matplotlib figure to HTML
+image_stream = BytesIO()
+fig.savefig(image_stream, format='png')
+image_stream.seek(0)
+base64_image = base64.b64encode(image_stream.read()).decode('utf-8')
+
+# Embed the HTML with the pie chart
+html = f"""
+    <div style="position: fixed; top: 10px; left: 10px; z-index: 1000;">
+        <img src="data:image/png;base64,{base64_image}" alt="Pie Chart" width="250" height="250"/>
+    </div>
+"""
+
+# Embed the HTML with the pie chart directly on the Folium map
+m.get_root().html.add_child(folium.Element(html))
+
+# Vertical bar Chart
+
+regions = ['NA', 'EU', 'JP', 'Others']
+top_game_sales = [top_game_result[0][4], top_game_result[1][4], top_game_result[2][4], top_game_result[3][4]]
+second_top_game_sales = [second_top_game_result[0][4], second_top_game_result[1][4], second_top_game_result[2][4], second_top_game_result[3][4]]
+third_top_game_sales = [third_top_game_result[0][4], third_top_game_result[1][4], third_top_game_result[2][4], third_top_game_result[3][4]]
+
+bar_width = 0.25
+index = np.arange(len(regions))
+
+fig, ax = plt.subplots(figsize=(10, 10))
+plt.title('Sales Volume %', fontsize=30)
+bar1 = ax.bar(index, top_game_sales, bar_width, label='1st', color='#fcd568')
+bar2 = ax.bar(index + bar_width, second_top_game_sales, bar_width, label='2nd', color='#e070ff')
+bar3 = ax.bar(index + 2 * bar_width, third_top_game_sales, bar_width, label='3rd', color='#68fcf5')
+
+ax.set_xlabel('Regions', fontsize=20)
+ax.set_ylabel('Sales (in millions)', fontsize=20)
+ax.set_title('Sales Difference of Top Sellers', fontsize=30)
+ax.set_xticks(index + bar_width)
+ax.set_xticklabels(regions, fontsize=15)
+fig.patch.set_alpha(0.0)
+ax.patch.set_alpha(0.0)
+ax.legend(loc='upper center', fancybox=True, shadow=True, ncol=3, fontsize=15)
+
+image_stream = BytesIO()
+fig.savefig(image_stream, format='png')
+image_stream.seek(0)
+base64_image = base64.b64encode(image_stream.read()).decode('utf-8')
+
+# Embed the HTML with the pie chart
+html = f"""
+    <div style="position: fixed; top: 300px; left: 10px; z-index: 1000;">
+        <img src="data:image/png;base64,{base64_image}" alt="Pie Chart" width="250" height="250"/>
+    </div>
+"""
+
+# Embed the HTML with the pie chart directly on the Folium map
+m.get_root().html.add_child(folium.Element(html))
 
 # Display the map
 m
