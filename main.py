@@ -12,8 +12,6 @@ import numpy as np
 from io import BytesIO
 import base64
 from folium import IFrame, plugins
-import plotly.express as px
-import plotly.io as pio
 
 st.set_page_config(page_title="GameScope", page_icon=":trident:", layout="wide")
 
