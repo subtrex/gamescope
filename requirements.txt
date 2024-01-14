@@ -8,8 +8,4 @@ seaborn
 matplotlib
 numpy
 geopy
-pydeck
-graphviz
-altair
-streamlit_agraph
-matplotlib_venn
+branca==0.3.1
