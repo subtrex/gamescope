@@ -204,12 +204,13 @@ cumulative_sales = [round(value, 2) for value in cumulative_sales]
 #north_america_geojson_url = "https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json"
 #north_america_data = requests.get(north_america_geojson_url).json()
 
-world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-north_america_data = world[world['continent'] == 'North America']
-europe_data = world[world['continent'] == 'Europe']
-japan_data = world[world['name'] == 'Japan']
+#world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+world = gpd.read_file("geoData/ne_110m_admin_0_countries.shp")
+north_america_data = world[world['CONTINENT'] == 'North America']
+europe_data = world[world['CONTINENT'] == 'Europe']
+japan_data = world[world['NAME'] == 'Japan']
 exclude_countries_continents = ['North America', 'Europe', 'Japan']
-rest_of_world_data = world[~(world['name'].isin(exclude_countries_continents) | world['continent'].isin(exclude_countries_continents))]
+rest_of_world_data = world[~(world['NAME'].isin(exclude_countries_continents) | world['CONTINENT'].isin(exclude_countries_continents))]
 
 # Create a Folium map centered around North America
 m = folium.Map(location=[30.4168, -3.7038], zoom_start=2.3)
@@ -359,4 +360,4 @@ html = f"""
 m.get_root().html.add_child(folium.Element(html))
 
 # Display the map
-m
+folium_static(m)
